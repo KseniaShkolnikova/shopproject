@@ -6,7 +6,7 @@
 {% endblock %}
 
 {% block content %}
-                    {% if user.is_authenticated and user.is_staff %}
+{% if user.is_authenticated and user.is_staff %}
 
 <div class="container">
     <div class="form-container">
@@ -29,7 +29,7 @@
         
         <div class="detail-item">
             <span class="detail-label">Комментарий:</span>
-            <span class="detail-value">{{ Order.comment }}</span>
+            <span class="detail-value">{{ Order.comment|default:"-" }}</span>
         </div>
         
         <div class="detail-item">
@@ -51,17 +51,37 @@
         
         <div class="detail-item">
             <span class="detail-label">Дата оплаты:</span>
-            <span class="detail-value">{{ Order.payment_date }}</span>
+            <span class="detail-value">{{ Order.payment_date|default:"-" }}</span>
         </div>
+        
+        <h3>Позиции заказа:</h3>
+        <table class="order-items-table">
+            <thead>
+                <tr>
+                    <th>Позиция менюㅤ</th>
+                    <th>Количествоㅤ</th>
+                    <th>Цена</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in Order.orderitem_set.all %}
+                <tr>
+                    <td>{{ item.menu_item.name }}</td>
+                    <td>{{ item.quantity }}</td>
+                    <td>{{ item.menu_item.price }} руб.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
         
         <div class="action-buttons">
             <a href="{% url 'Order_list_view' %}" class="back-link">Вернуться к списку</a>
             <a href="{% url 'Order_update_view' Order.pk %}" class="back-link">Редактировать</a>
-            <a href="{% url 'Order_delete_view' Order.pk %}"class="back-link">Удалить</a>
+            <a href="{% url 'Order_delete_view' Order.pk %}" class="back-link">Удалить</a>
         </div>
     </div>
 </div>
 {% else %}
-            <h1>Сначала авторизируйтесь</h1>
+    <h1>Сначала авторизируйтесь</h1>
 {% endif %}
 {% endblock %}

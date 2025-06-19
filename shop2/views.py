@@ -27,6 +27,11 @@ class OrderItemCreateView(PermissionRequiredMixin,CreateView):
     template_name = 'OrderItem/OrderItem_form.html'
     success_url= reverse_lazy('OrderItem_list_view')
 
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        self.object.order.calculate_total()  
+        return response
+
 class OrderItemUpdateView(PermissionRequiredMixin,UpdateView):
     permission_required = 'shop.change_orderItem'
     model = OrderItem
@@ -54,20 +59,51 @@ class OrderDetailView(PermissionRequiredMixin,DetailView):
     model = Order
     template_name = 'Order/Order_detail.html'
     context_object_name = 'Order'    
+    queryset = Order.objects.prefetch_related('orderitem_set__menu_item')
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        response = super().form_valid(form)
+        self.object.calculate_total()  
+        self.object.save()  
+        return response
 
-class OrderCreateView(PermissionRequiredMixin,CreateView):
+class OrderCreateView(PermissionRequiredMixin, CreateView):
     permission_required = 'shop.add_order'
     model = Order
     form_class = OrderForm
     template_name = 'Order/Order_form.html'
-    success_url= reverse_lazy('Order_list_view')
+    success_url = reverse_lazy('Order_list_view')
 
-class OrderUpdateView(PermissionRequiredMixin,UpdateView):
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        if not self.request.user.is_staff:
+            form.fields['user'].widget = forms.HiddenInput()
+            form.fields['user'].initial = self.request.user.id
+        return form
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        self.object.calculate_total()
+        return response
+    
+class OrderUpdateView(PermissionRequiredMixin, UpdateView):
     permission_required = 'shop.change_order'
     model = Order
     form_class = OrderForm
     template_name = 'Order/Order_form.html'
-    success_url= reverse_lazy('Order_list_view')    
+    success_url = reverse_lazy('Order_list_view')
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        if not self.request.user.is_staff:
+            form.fields['user'].widget = forms.HiddenInput()
+            form.fields['user'].initial = self.request.user.id
+        return form
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        self.object.calculate_total()
+        return response
 
 class OrderdeleteView(PermissionRequiredMixin,DeleteView):
     permission_required = 'shop.delete_order'
@@ -75,48 +111,6 @@ class OrderdeleteView(PermissionRequiredMixin,DeleteView):
     context_object_name = 'Order'    
     template_name = 'Order/Order_confirm_delete.html'
     success_url= reverse_lazy('Order_list_view') 
-
-
-
-
-
-
-
-class CartItemListView(PermissionRequiredMixin,ListView):
-    permission_required = 'shop.view_cartItem'
-    model = CartItem
-    template_name = 'CartItem/CartItem_list.html'
-    context_object_name = 'CartItem'
-    
-class CartItemDetailView(PermissionRequiredMixin,DetailView):
-    permission_required = 'shop.view_cartItem'
-    model = CartItem
-    template_name = 'CartItem/CartItem_detail.html'
-    context_object_name = 'CartItem'    
-
-class CartItemCreateView(PermissionRequiredMixin,CreateView):
-    permission_required = 'shop.add_cartItem'
-    model = CartItem
-    form_class = CartItemForm
-    template_name = 'CartItem/CartItem_form.html'
-    success_url= reverse_lazy('CartItem_list_view')
-
-class CartItemUpdateView(PermissionRequiredMixin,UpdateView):
-    permission_required = 'shop.change_cartItem'
-    model = CartItem
-    form_class = CartItemForm
-    template_name = 'CartItem/CartItem_form.html'
-    success_url= reverse_lazy('CartItem_list_view')    
-
-class CartItemdeleteView(PermissionRequiredMixin,DeleteView):
-    permission_required = 'shop.delete_cartItem'
-    model = CartItem
-    context_object_name = 'CartItem'    
-    template_name = 'CartItem/CartItem_confirm_delete.html'
-    success_url= reverse_lazy('CartItem_list_view') 
-
-
-
 
 
 

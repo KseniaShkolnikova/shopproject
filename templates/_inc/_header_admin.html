@@ -157,7 +157,6 @@
             <ul>
                 {% if user.is_authenticated and user.is_staff %}
                 <li><a href="{% url 'products' %}">Вернуться на сайт </a></li>
-                <li><a href="{% url 'CartItem_list_view' %}">Содержимое корзины</a></li>
                 <li><a href="{% url 'Categories_list_view' %}">Категории</a></li>
                 <li><a href="{% url 'MenuItem_list_view' %}">Меню</a></li>
                 <li><a href="{% url 'Order_list_view' %}">Заказы</a></li>

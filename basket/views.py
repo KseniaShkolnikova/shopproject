@@ -52,9 +52,10 @@ def basket_buy(request):
     payment_method = PaymentMethod.objects.filter(is_active=True).first()
     
     if request.method == 'POST':
-        form = OrderForm(request.POST)
+        form = OrderForm2(request.POST)
         if form.is_valid():
             order = form.save(commit=False)
+            order.user = request.user  # Добавляем текущего пользователя
             order.total_price = basket.get_total_price()
             order.status = status
             order.save()
@@ -73,10 +74,9 @@ def basket_buy(request):
             'payment_method': payment_method.id if payment_method else None,
             'total_price': basket.get_total_price()
         }
-        form = OrderForm(initial=initial_data)
+        form = OrderForm2(initial=initial_data)
     
     return render(request, 'orders/order_form.html', {'form': form, 'basket': basket})
-
 @login_required
 def open_order(request):
     return redirect('basket_buy')

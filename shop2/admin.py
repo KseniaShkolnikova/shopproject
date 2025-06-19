@@ -13,12 +13,6 @@ class PaymentMethodAdmin(admin.ModelAdmin):
 @admin.register(MenuItem)
 class MenuItemAdmin(admin.ModelAdmin):
     pass
-@admin.register(Cart)
-class CartAdmin(admin.ModelAdmin):
-    pass
-@admin.register(CartItem)
-class CartItemAdmin(admin.ModelAdmin):
-    pass
 @admin.register(OrderItem)
 class OrderItemAdmin(admin.ModelAdmin):
     pass

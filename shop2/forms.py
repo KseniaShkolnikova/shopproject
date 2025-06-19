@@ -31,27 +31,32 @@ class CategoriesForm(forms.ModelForm):
             'photo': forms.FileInput(attrs={'class': 'form-control'}),
         }
 
-class CartItemForm(forms.ModelForm):
-    class Meta:
-        model = CartItem
-        fields = ['cart','menu_item','quantity'] 
-        widgets = {
-            'cart': forms.Select(attrs={'class': 'form-select'}),
-            'menu_item': forms.Select(attrs={'class': 'form-select'}),
-            'quantity': forms.NumberInput(attrs={'class': 'form-control'}),
-        }
+
 
 class OrderForm(forms.ModelForm):
+    user = forms.ModelChoiceField(
+        queryset=User.objects.none(),  
+        label="Покупатель",
+        required=False,
+        widget=forms.Select(attrs={'class': 'form-select'})
+    )
+    
     class Meta:
         model = Order
-        fields = ['status','total_price','address','comment','payment_method']
+        fields = ['user', 'address', 'comment', 'payment_method']
         widgets = {
-            'status': forms.Select(attrs={'class': 'form-select'}),
-            'total_price': forms.NumberInput(attrs={'class': 'form-control'}),
             'address': forms.TextInput(attrs={'class': 'form-control'}),
             'comment': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
             'payment_method': forms.Select(attrs={'class': 'form-select'}),
         }
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['user'].queryset = User.objects.all().order_by('username')
+        
+        if 'instance' not in kwargs: 
+            self.fields['status'].initial = OrderStatus.objects.get(code='new')
+            self.fields['total_price'].initial = 0
 
 class OrderItemForm(forms.ModelForm):
     class Meta:

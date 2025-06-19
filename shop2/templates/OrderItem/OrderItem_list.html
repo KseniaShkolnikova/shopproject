@@ -17,10 +17,14 @@
     <ul class="menu-list">
         {% for position in OrderItem %}
         <li>
-            <a href="{% url 'OrderItem_detail_view' position.pk %}" class="menu-info">{{ position.order }}</a>
-            <div class="action-links">
-                <a href="{% url 'OrderItem_update_view' position.pk %}" class="action-link edit-link">Редактировать</a>
-                <a href="{% url 'OrderItem_delete_view' position.pk %}" class="action-link delete-link">Удалить</a>
+            <div class="order-item-container">
+                <a href="{% url 'OrderItem_detail_view' position.pk %}" class="menu-info">
+                    {{ position.order }}
+                </a>
+                <div class="action-links">
+                    <a href="{% url 'OrderItem_update_view' position.pk %}" class="action-link edit-link">Редактировать</a>
+                    <a href="{% url 'OrderItem_delete_view' position.pk %}" class="action-link delete-link">Удалить</a>
+                </div>
             </div>
         </li>
         {% empty %}
@@ -33,4 +37,27 @@
 {% else %}
             <h1>Сначала авторизируйтесь</h1>
 {% endif %}
+
+<style>
+    .order-item-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+    }
+    
+    .menu-info {
+        flex-grow: 1;
+        margin-right: 20px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    
+    .action-links {
+        display: flex;
+        gap: 10px;
+        flex-shrink: 0;
+    }
+</style>
 {% endblock %}
