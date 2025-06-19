@@ -1,0 +1,60 @@
+{% extends 'admin_base.html' %}
+{% load static %}
+
+{% block title_name%}
+{% if form.instance.pk %}Редактировать товар{% else %}Добавить товар{% endif %}
+{%endblock%}   
+{% block content%}
+                    {% if user.is_authenticated and user.is_staff %}
+
+<body>
+    <div class="container">
+        <div class="form-container">
+            <h1>{% if form.instance.pk %}Редактировать товар{% else %}Добавить товар{% endif %}</h1>
+            
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                
+                {% for field in form %}
+                    {% if field.field.widget.input_type == 'checkbox' %}
+                    <div class="checkbox-container">
+                        {{ field }}
+                        <label for="{{ field.id_for_label }}" class="checkbox-label">{{ field.label }}</label>
+                    </div>
+                    {% else %}
+                    <p>
+                        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                        {{ field }}
+                    </p>
+                    {% endif %}
+                {% endfor %}
+                
+                <div class="form-actions">
+                    <button type="submit" class="submit-btn">Сохранить</button>
+                    <a href="{% url 'MenuItem_list_view' %}" class="back-link">Вернуться к списку</a>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script>
+        document.querySelectorAll('input[type="file"]').forEach(input => {
+            input.addEventListener('change', function(e) {
+                const fileName = this.files[0]?.name || 'Файл не выбран';
+                const fileDisplay = this.parentElement.querySelector('.file-name') || 
+                                  document.createElement('span');
+                
+                if (!this.parentElement.querySelector('.file-name')) {
+                    fileDisplay.className = 'file-name';
+                    this.parentElement.appendChild(fileDisplay);
+                }
+                
+                fileDisplay.textContent = fileName;
+            });
+        });
+    </script>
+</body>
+</html>
+{% else %}
+            <h1>Сначала авторизируйтесь</h1>
+{% endif %}
+{%endblock%}   

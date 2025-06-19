@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Регистрация | SOY FLOWER</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            background-color: #000000;
+            font-family: 'Arial', sans-serif;
+            color: #ffffff;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), 
+                            url('https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .reg-container {
+            width: 100%;
+            max-width: 500px;
+            padding: 40px;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 10px;
+            box-shadow: 0 0 30px rgba(255, 0, 0, 0.3);
+            border: 1px solid #ff0000;
+            animation: fadeIn 0.6s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .reg-title {
+            color: #ff0000;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 32px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+        }
+        
+        .reg-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #ff0000;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid #333;
+            border-radius: 5px;
+            color: #ffffff;
+            font-size: 16px;
+            transition: all 0.3s;
+            box-sizing: border-box;
+        }
+        
+        .form-group input:focus {
+            border-color: #ff0000;
+            outline: none;
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
+            background: rgba(20, 20, 20, 0.7);
+        }
+        
+        .reg-btn {
+            background: linear-gradient(to right, #ff0000, #990000);
+            color: white;
+            border: none;
+            padding: 15px;
+            font-size: 18px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-top: 20px;
+            width: 100%;
+        }
+        
+        .reg-btn:hover {
+            background: linear-gradient(to right, #cc0000, #770000);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 0, 0, 0.4);
+        }
+        
+        .reg-links {
+            display: flex;
+            justify-content: center;
+            margin-top: 25px;
+        }
+        
+        .reg-link {
+            color: #ff4d4d;
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.3s;
+        }
+        
+        .reg-link:hover {
+            color: #ff0000;
+            text-decoration: underline;
+        }
+        
+        .errorlist {
+            color: #ff3333;
+            margin-top: 5px;
+            padding-left: 0;
+            list-style: none;
+            font-size: 14px;
+        }
+        
+        .sakura-icon {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            color: #ff0000;
+            opacity: 0.5;
+            font-size: 24px;
+        }
+    </style>
+</head>
+<body>
+    <div class="reg-container">
+        <div class="sakura-icon">
+            <i class="fas fa-leaf"></i>
+        </div>
+        
+        <h1 class="reg-title">Регистрация</h1>
+        
+        <form method="post" class="reg-form" action="{% url 'registration_user' %}">
+            {% csrf_token %}
+            
+            {% if form.errors %}
+                <div class="error-message">
+                    <p>Пожалуйста, исправьте следующие ошибки:</p>
+                    <p style="color:white">{{ form.non_field_errors }}</p>
+                </div>
+            {% endif %}
+            
+            <div class="form-group">
+                <label for="{{ form.username.id_for_label }}">Имя пользователя</label>
+                <input type="text" name="username" id="{{ form.username.id_for_label }}" 
+                       class="form-control" required>
+                {% if form.username.errors %}
+                    <ul class="errorlist">
+                        {% for error in form.username.errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+            
+            <div class="form-group">
+                <label for="{{ form.email.id_for_label }}">Email</label>
+                <input type="email" name="email" id="{{ form.email.id_for_label }}" 
+                       class="form-control" required>
+                {% if form.email.errors %}
+                    <ul class="errorlist">
+                        {% for error in form.email.errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+            
+            <div class="form-group">
+                <label for="{{ form.password1.id_for_label }}">Пароль</label>
+                <input type="password" name="password1" id="{{ form.password1.id_for_label }}" 
+                       class="form-control" required>
+                {% if form.password1.errors %}
+                    <ul class="errorlist">
+                        {% for error in form.password1.errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+            
+            <div class="form-group">
+                <label for="{{ form.password2.id_for_label }}">Повторный пароль</label>
+                <input type="password" name="password2" id="{{ form.password2.id_for_label }}" 
+                       class="form-control" required>
+                {% if form.password2.errors %}
+                    <ul class="errorlist">
+                        {% for error in form.password2.errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+            
+            <button type="submit" class="reg-btn">Зарегистрироваться</button>
+        </form>
+        
+        <div class="reg-links">
+            <a href="{% url 'login_user' %}" class="reg-link">Уже есть аккаунт? Войти</a>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            console.log("Document ready");
+        });
+    </script>
+</body>
+</html>

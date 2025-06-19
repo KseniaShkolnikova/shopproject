@@ -1,0 +1,79 @@
+{% extends 'admin_base.html' %}
+{% load static %}
+
+{% block title_name %}
+{{ MenuItem.name }} - Детали
+{% endblock %}
+
+{% block content %}
+                    {% if user.is_authenticated and user.is_staff %}
+
+<div class="container">
+    <div class="form-container">
+        <h1>{{ MenuItem.name }}</h1>
+        
+        {% if MenuItem.photo %}
+        <div class="image-container">
+            <img src="{{ MenuItem.photo.url }}" alt="{{ MenuItem.name }}" class="detail-image">
+        </div>
+        {% endif %}
+        
+        <div class="detail-grid">
+            <div class="detail-item">
+                <span class="detail-label">Описание:</span>
+                <span class="detail-value">{{ MenuItem.description|default:"-" }}</span>
+            </div>
+            
+            <div class="detail-item">
+                <span class="detail-label">Цена:</span>
+                <span class="detail-value">{{ MenuItem.price }} ₽</span>
+            </div>
+            
+            <div class="detail-item">
+                <span class="detail-label">Вес:</span>
+                <span class="detail-value">{{ MenuItem.weight }} г</span>
+            </div>
+            
+            <div class="detail-item">
+                <span class="detail-label">Время приготовления:</span>
+                <span class="detail-value">{{ MenuItem.cooking_time }} мин</span>
+            </div>
+            
+            <div class="detail-item">
+                <span class="detail-label">Острое:</span>
+                <span class="status-badge {% if MenuItem.is_spicy %}status-active{% else %}status-inactive{% endif %}">
+                    {% if MenuItem.is_spicy %}Да{% else %}Нет{% endif %}
+                </span>
+            </div>
+            
+            <div class="detail-item">
+                <span class="detail-label">Вегетарианское:</span>
+                <span class="status-badge {% if MenuItem.is_vegetarian %}status-active{% else %}status-inactive{% endif %}">
+                    {% if MenuItem.is_vegetarian %}Да{% else %}Нет{% endif %}
+                </span>
+            </div>
+            
+            <div class="detail-item">
+                <span class="detail-label">Доступно:</span>
+                <span class="status-badge {% if MenuItem.is_available %}status-active{% else %}status-inactive{% endif %}">
+                    {% if MenuItem.is_available %}Да{% else %}Нет{% endif %}
+                </span>
+            </div>
+            
+            <div class="detail-item">
+                <span class="detail-label">Категория:</span>
+                <span class="detail-value">{{ MenuItem.category|default:"-" }}</span>
+            </div>
+        </div>
+        
+        <div class="action-buttons">
+            <a href="{% url 'MenuItem_list_view' %}" class="back-link">Вернуться к списку</a>
+            <a href="{% url 'MenuItem_update_view' MenuItem.pk %}"class="back-link">Редактировать</a>
+            <a href="{% url 'MenuItem_delete_view' MenuItem.pk %}"class="back-link">Удалить</a>
+        </div>
+    </div>
+</div>
+{% else %}
+            <h1>Сначала авторизируйтесь</h1>
+{% endif %}
+{% endblock %}

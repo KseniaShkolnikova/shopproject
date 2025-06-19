@@ -1,0 +1,67 @@
+{% extends 'admin_base.html' %}
+{% load static %}
+
+{% block title_name %}
+Детали заказа
+{% endblock %}
+
+{% block content %}
+                    {% if user.is_authenticated and user.is_staff %}
+
+<div class="container">
+    <div class="form-container">
+        <h1>Заказ пользователя: {{ Order.user }}</h1>
+        
+        <div class="detail-item">
+            <span class="detail-label">Статус:</span>
+            <span class="detail-value">{{ Order.status }}</span>
+        </div>
+        
+        <div class="detail-item">
+            <span class="detail-label">Общая сумма:</span>
+            <span class="detail-value">{{ Order.total_price }}</span>
+        </div>
+        
+        <div class="detail-item">
+            <span class="detail-label">Адрес:</span>
+            <span class="detail-value">{{ Order.address }}</span>
+        </div>
+        
+        <div class="detail-item">
+            <span class="detail-label">Комментарий:</span>
+            <span class="detail-value">{{ Order.comment }}</span>
+        </div>
+        
+        <div class="detail-item">
+            <span class="detail-label">Дата создания:</span>
+            <span class="detail-value">{{ Order.created_at }}</span>
+        </div>
+        
+        <div class="detail-item">
+            <span class="detail-label">Способ оплаты:</span>
+            <span class="detail-value">{{ Order.payment_method }}</span>
+        </div>
+        
+        <div class="detail-item">
+            <span class="detail-label">Оплачен:</span>
+            <span class="status-badge {% if Order.is_paid %}status-active{% else %}status-inactive{% endif %}">
+                {% if Order.is_paid %}Да{% else %}Нет{% endif %}
+            </span>
+        </div>
+        
+        <div class="detail-item">
+            <span class="detail-label">Дата оплаты:</span>
+            <span class="detail-value">{{ Order.payment_date }}</span>
+        </div>
+        
+        <div class="action-buttons">
+            <a href="{% url 'Order_list_view' %}" class="back-link">Вернуться к списку</a>
+            <a href="{% url 'Order_update_view' Order.pk %}" class="back-link">Редактировать</a>
+            <a href="{% url 'Order_delete_view' Order.pk %}"class="back-link">Удалить</a>
+        </div>
+    </div>
+</div>
+{% else %}
+            <h1>Сначала авторизируйтесь</h1>
+{% endif %}
+{% endblock %}

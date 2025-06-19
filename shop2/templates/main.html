@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title_name%}
+SOY FLOWER | Ресторан японской кухни
+{%endblock%}   
+
+{% block content%}
+<section class="hero">
+    <div class="hero-content">
+        <h1 style="color: white;">Насладитесь <span>истинным вкусом</span> Японии</h1>        <p>SOY FLOWER - это искусство японской кухни в каждом блюде. Свежие ингредиенты, традиционные рецепты и современная подача.</p>
+        <a href="{% url 'products' %}" class="btn">Посмотреть меню</a>
+    </div>
+</section>
+
+<section class="container">
+    <div class="section-title">
+        <h2>Наше меню</h2>
+        <p>Откройте для себя богатство вкусов традиционной японской кухни</p>
+    </div>
+    
+    <div class="menu-categories">
+        <div class="category-card">
+            <div class="category-img" style="background-image: url('https://jazzpizza.ru/products_pictures/raznitsa-mejdu-sushi-sashimi-nigiri-1.jpg');"></div>
+            <div class="category-content">
+                <h3>Суши и сашими</h3>
+                <p>Свежайшая рыба, идеально приготовленный рис и традиционные японские техники</p>
+                <a href="#" class="btn">Выбрать</a>
+            </div>
+        </div>
+        
+        <div class="category-card">
+            <div class="category-img" style="background-image: url('https://images.unsplash.com/photo-1553621042-f6e147245754?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');"></div>
+            <div class="category-content">
+                <h3>Роллы</h3>
+                <p>Классические и авторские роллы с разнообразными начинками и соусами</p>
+                <a href="#" class="btn">Выбрать</a>
+            </div>
+        </div>
+        
+        <div class="category-card">
+            <div class="category-img" style="background-image: url('https://images.unsplash.com/photo-1547592180-85f173990554?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');"></div>
+            <div class="category-content">
+                <h3>Горячие блюда</h3>
+                <p>Теплые японские блюда - темпура, удон, рамен и многое другое</p>
+                <a href="#" class="btn">Выбрать</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="special-offer">
+    <div class="container">
+        <h2>Специальное предложение <span style="color: white;">этой недели</span></h2>
+        <p>Закажите сет "Сакура" и получите бесплатную доставку и набор соевого соуса с васаби и имбирем</p>
+        <a href={% url "products" %} class="btn">Заказать сейчас</a>
+    </div>
+</section>
+
+<section class="testimonials">
+    <div class="container">
+        <div class="section-title">
+            <h2>Отзывы</h2>
+            <p>Что говорят наши клиенты</p>
+        </div>
+        
+        <div class="testimonial-grid">
+            <div class="testimonial-card">
+                <div class="testimonial-text">
+                    "Лучшие суши в городе! Заказываю регулярно, всегда свежие ингредиенты и быстрая доставка. Особенно люблю их авторские роллы."
+                </div>
+                <div class="testimonial-author">
+                    <div class="author-img" style="background-image: url('https://randomuser.me/api/portraits/women/44.jpg');"></div>
+                    <div class="author-info">
+                        <h4>Анна К.</h4>
+                        <p>Постоянный клиент</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="testimonial-card">
+                <div class="testimonial-text">
+                    "Заказали сет на корпоратив, все были в восторге! Красивая подача, свежие продукты и отличный сервис. Обязательно будем заказывать снова."
+                </div>
+                <div class="testimonial-author">
+                    <div class="author-img" style="background-image: url('https://randomuser.me/api/portraits/men/32.jpg');"></div>
+                    <div class="author-info">
+                        <h4>Дмитрий С.</h4>
+                        <p>Клиент</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="testimonial-card">
+                <div class="testimonial-text">
+                    "Очень вкусные горячие блюда, особенно рамен. Доставка всегда вовремя, даже в плохую погоду. Рекомендую всем любителям японской кухни!"
+                </div>
+                <div class="testimonial-author">
+                    <div class="author-img" style="background-image: url('https://randomuser.me/api/portraits/women/68.jpg');"></div>
+                    <div class="author-info">
+                        <h4>Елена М.</h4>
+                        <p>Клиент</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{%endblock%}

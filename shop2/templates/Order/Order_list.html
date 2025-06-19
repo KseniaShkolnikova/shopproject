@@ -1,0 +1,38 @@
+{% extends 'admin_base.html' %}
+{% load static %}
+
+{% block title_name %}
+Заказы
+{% endblock %}
+
+{% block content %}
+                    {% if user.is_authenticated and user.is_staff %}
+
+<div class="container">
+    <div class="page-header">
+        <h1>Заказы</h1>
+        <a href="{% url 'Order_create_view' %}" class="add-link">Добавить</a>
+    </div>
+
+    <ul class="menu-list">
+        {% for position in Order %}
+        <li>
+            <a href="{% url 'Order_detail_view' position.pk %}" class="order-info">
+                {{ position.user }} - {{ position.created_at }}
+            </a>
+            <div class="action-links">
+                <a href="{% url 'Order_update_view' position.pk %}" class="action-link edit-link">Редактировать</a>
+                <a href="{% url 'Order_delete_view' position.pk %}" class="action-link delete-link">Удалить</a>
+            </div>
+        </li>
+        {% empty %}
+        <div class="empty-message">
+            Нет заказов для отображения. Нажмите "Добавить", чтобы создать новый.
+        </div>
+        {% endfor %}
+    </ul>
+</div>
+{% else %}
+            <h1>Сначала авторизируйтесь</h1>
+{% endif %}
+{% endblock %}

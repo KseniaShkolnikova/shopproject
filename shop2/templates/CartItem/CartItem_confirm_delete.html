@@ -1,0 +1,30 @@
+{% extends 'admin_base.html' %}
+{% load static %}
+
+{% block title_name%}
+Удаление товара из корзины
+{%endblock%}   
+{% block content%}
+                    {% if user.is_authenticated and user.is_staff %}
+
+<body>
+    <div class="container">
+        <div class="delete-confirmation">
+            <h1>Удалить "{{CartItem.menu_item}}" из корзины?</h1>
+            <p class="warning-message">Вы уверены, что хотите удалить этот товар из корзины? Это действие нельзя отменить.</p>
+            
+            <form method="post">
+                {% csrf_token %}
+                <div class="action-buttons">
+                    <button type="submit" class="delete-btn">Удалить</button>
+                    <a href="{% url 'CartItem_list_view' %}" class="cancel-link">Вернуться к списку</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
+{% else %}
+            <h1>Сначала авторизируйтесь</h1>
+{% endif %}
+{%endblock%}   

@@ -1,0 +1,36 @@
+{% extends 'admin_base.html' %}
+{% load static %}
+
+{% block title_name %}
+Детали заказа
+{% endblock %}
+
+{% block content %}
+                    {% if user.is_authenticated and user.is_staff %}
+
+<div class="container">
+    <div class="form-container">
+        <h1>{{ OrderItem.order }}</h1>
+        
+        <div class="detail-item">
+            <span class="detail-label">Позиция меню:</span>
+            <span class="detail-value">{{ OrderItem.menu_item }}</span>
+        </div>
+        
+        <div class="detail-item">
+            <span class="detail-label">Количество:</span>
+            <span class="detail-value">{{ OrderItem.quantity }}</span>
+        </div>
+        
+        <div class="action-buttons">
+            <a href="{% url 'OrderItem_list_view' %}" class="back-link">Вернуться к списку</a>
+            <a href="{% url 'OrderItem_update_view' OrderItem.pk %}"class="back-link">Редактировать</a>
+            <a href="{% url 'OrderItem_delete_view' OrderItem.pk %}" class="back-link">Удалить</a>
+        </div>
+    </div>
+</div>
+{% else %}
+            <h1>Сначала авторизируйтесь</h1>
+{% endif %}
+
+{% endblock %}

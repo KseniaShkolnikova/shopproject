@@ -1,0 +1,36 @@
+{% extends 'admin_base.html' %}
+{% load static %}
+
+{% block title_name %}
+Категории
+{% endblock %}
+
+{% block content %}
+                    {% if user.is_authenticated and user.is_staff %}
+
+<div class="container">
+    <div class="page-header">
+        <h1>Категории</h1>
+        <a href="{% url 'Categories_create_view' %}" class="add-link">Добавить</a>
+    </div>
+
+    <ul class="menu-list">
+        {% for position in Categories %}
+        <li>
+            <a href="{% url 'Categories_detail_view' position.pk %}" class="category-info">{{ position.name }}</a>
+            <div class="action-links">
+                <a href="{% url 'Categories_update_view' position.pk %}" class="action-link edit-link">Редактировать</a>
+                <a href="{% url 'Categories_delete_view' position.pk %}" class="action-link delete-link">Удалить</a>
+            </div>
+        </li>
+        {% empty %}
+        <div class="empty-message">
+            Нет категорий для отображения. Нажмите "Добавить", чтобы создать новую.
+        </div>
+        {% endfor %}
+    </ul>
+</div>
+{% else %}
+            <h1>Сначала авторизируйтесь</h1>
+{% endif %}
+{% endblock %}

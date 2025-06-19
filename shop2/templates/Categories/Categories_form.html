@@ -1,0 +1,79 @@
+{% extends 'admin_base.html' %}
+{% load static %}
+
+{% block title_name%}
+{% if form.instance.pk %}Редактировать категорию{% else %}Добавить категорию{% endif %}
+{%endblock%}   
+{% block content%}
+                    {% if user.is_authenticated and user.is_staff %}
+
+<body>
+    <div class="container">
+        <div class="form-container">
+            <h1>{% if form.instance.pk %}Редактировать содержимое заказа{% else %}Добавить категорию{% endif %}</h1>
+            
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                
+                {% for field in form %}
+                    {% if field.field.widget.input_type == 'checkbox' %}
+                    <div class="checkbox-container">
+                        {{ field }}
+                        <label for="{{ field.id_for_label }}" class="checkbox-label">{{ field.label }}</label>
+                        {% if field.errors %}
+                            <ul class="errorlist">
+                                {% for error in field.errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
+                    {% else %}
+                    <p>
+                        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                        {{ field }}
+                        {% if field.errors %}
+                            <ul class="errorlist">
+                                {% for error in field.errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </p>
+                    {% endif %}
+                {% endfor %}
+                
+                <div class="form-actions">
+                    <button type="submit" class="submit-btn">Сохранить</button>
+                    <a href="{% url 'OrderItem_list_view' %}" class="back-link">Вернуться к списку</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <script>
+        document.querySelectorAll('input[type="file"]').forEach(input => {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'file-input-wrapper';
+            
+            const button = document.createElement('div');
+            button.className = 'file-input-button';
+            button.innerHTML = 'Выберите файл <span class="file-name">Файл не выбран</span>';
+            
+            input.parentNode.insertBefore(wrapper, input);
+            wrapper.appendChild(button);
+            wrapper.appendChild(input);
+            
+            input.addEventListener('change', function() {
+                const fileName = this.files[0]?.name || 'Файл не выбран';
+                button.querySelector('.file-name').textContent = fileName;
+            });
+        });
+    </script>
+</body>
+</html>
+{% else %}
+            <h1>Сначала авторизируйтесь</h1>
+{% endif %}
+{%endblock%}   

@@ -1,0 +1,286 @@
+{% extends 'base.html'%}
+{% load static %}
+{% block title_name %}
+Корзина | SOY FLOWER
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Основные цвета */
+    :root {
+        --red: #d32f2f;
+        --dark-red: #b71c1c;
+        --black: #212121;
+        --light-gray: #f8f8f8;
+    }
+    
+    body {
+        background-color: #fff;
+    }
+    
+    /* Контейнер корзины */
+    .basket-container {
+        max-width: 1200px;
+        margin: 40px auto;
+        padding: 0 20px;
+    }
+    
+    /* Заголовок */
+    .basket-title {
+        font-size: 32px;
+        color: var(--red);
+        text-align: center;
+        margin-bottom: 40px;
+        font-weight: 600;
+        position: relative;
+        padding-bottom: 15px;
+    }
+    
+    .basket-title:after {
+        content: '';
+        display: block;
+        width: 100px;
+        height: 3px;
+        background: var(--black);
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+    
+    /* Таблица */
+    .basket-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 40px;
+    }
+    
+    .basket-table th {
+        background-color: var(--black);
+        color: white;
+        padding: 15px 20px;
+        text-align: left;
+        font-weight: 500;
+        font-size: 16px;
+    }
+    
+    .basket-table td {
+        padding: 20px;
+        border-bottom: 1px solid #e0e0e0;
+        vertical-align: middle;
+    }
+    
+    .basket-table tr:hover {
+        background-color: var(--light-gray);
+    }
+    
+    /* Изображения */
+    .product-image-container {
+        width: 120px;
+        height: 120px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .product-image {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+    }
+    
+    /* Кнопки */
+    .btn {
+        display: inline-block;
+        padding: 10px 20px;
+        border-radius: 4px;
+        text-decoration: none;
+        font-weight: 500;
+        transition: all 0.2s;
+        font-size: 15px;
+    }
+    
+    .btn-danger {
+        background-color: var(--red);
+        color: white;
+        border: none;
+    }
+    
+    .btn-danger:hover {
+        background-color: var(--dark-red);
+    }
+    
+    .btn-outline {
+        border: 1px solid var(--black);
+        color: var(--black);
+        background: white;
+    }
+    
+    .btn-outline:hover {
+        background-color: var(--black);
+        color: white;
+    }
+    
+    /* Итоговая строка */
+    .total-row {
+        font-weight: 600;
+        background-color: #ffebee;
+    }
+    
+    .total-row td {
+        padding: 20px;
+    }
+    
+    /* Нижние кнопки */
+    .action-buttons {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 30px;
+    }
+    
+    .product-name {
+        font-size: 18px;
+        font-weight: 500;
+        color: var(--black);
+    }
+    
+    .price {
+        font-size: 17px;
+        font-weight: 500;
+    }
+    
+    .total-price {
+        font-size: 18px;
+        color: var(--red);
+    }
+
+    /* Стили для управления количеством (как в примере) */
+    .quantity-control {
+        display: flex;
+        align-items: center;
+    }
+    
+    .quantity-btn {
+        width: 30px;
+        height: 30px;
+        background: var(--black);
+        color: white;
+        border: none;
+        border-radius: 4px;
+        font-size: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: background 0.2s;
+    }
+    
+    .quantity-btn:hover {
+        background: var(--red);
+    }
+    
+    .quantity-input {
+        width: 50px;
+        height: 30px;
+        text-align: center;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        margin: 0 5px;
+        font-size: 16px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+{% if user.is_authenticated %}
+<div class="basket-container">
+    <h1 class="basket-title">ВАША КОРЗИНА</h1>
+    
+    <table class="basket-table">
+        <thead>
+            <tr>
+                <th style="width: 140px;">Фото</th>
+                <th>Название</th>
+                <th>Количество</th>
+                <th>Цена</th>
+                <th>Сумма</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in basket %}
+                {% with product=item.product %}
+                <tr>
+                    <td>
+                        <div class="product-image-container">
+                            {% if product.photo %}
+                                <img src="{{ product.photo.url }}" class="product-image" alt="{{ product.name }}">
+                            {% else %}
+                                <div style="width:120px; height:120px; background:#f0f0f0; display:flex; align-items:center; justify-content:center; color: #777;">
+                                    Нет фото
+                                </div>
+                            {% endif %}
+                        </div>
+                    </td>
+                    <td>
+                        <a href="{{ product.get_absolute_url }}" class="product-name">
+                            {{ product.name }}
+                        </a>
+                    </td>
+                    <td>
+                        <form action="{% url 'basket:basket_add' product.id %}" method="post" class="quantity-control">
+                            {% csrf_token %}
+                            <button type="button" class="quantity-btn minus" onclick="this.parentNode.querySelector('input[type=number]').stepDown(); this.parentNode.submit()">-</button>
+                            <input type="number" name="quantity" value="{{ item.quantity }}" min="1" class="quantity-input" onchange="this.parentNode.submit()">
+                            <button type="button" class="quantity-btn plus" onclick="this.parentNode.querySelector('input[type=number]').stepUp(); this.parentNode.submit()">+</button>
+                            <input type="hidden" name="reload" value="True">
+                        </form>
+                    </td>
+                    <td class="price">{{ item.price }} ₽</td>
+                    <td class="price">{{ item.total_price }} ₽</td>
+                    <td>
+                        <a href="{% url 'basket:basket_remove' product.id %}" class="btn btn-danger">
+                            Удалить
+                        </a>
+                    </td>
+                </tr>
+                {% endwith %}
+            {% empty %}
+                <tr>
+                    <td colspan="6" style="text-align: center; padding: 40px;">
+                        Ваша корзина пуста
+                    </td>
+                </tr>
+            {% endfor %}
+            
+            {% if basket|length > 0 %}
+            <tr class="total-row">
+                <td colspan="2"><strong>ИТОГО</strong></td>
+<td><strong>{{ basket|length }} позиций(ия)</strong></td>
+                <td></td>
+                <td class="total-price"><strong>{{ basket.get_total_price }} ₽</strong></td>
+                <td>
+                    <a href="{% url 'basket:basket_clear' %}" class="btn btn-danger">
+                        Очистить
+                    </a>
+                </td>
+            </tr>
+            {% endif %}
+        </tbody>
+    </table>
+    
+    <div class="action-buttons">
+        <a href="{% url 'products' %}" class="btn btn-outline">
+            ← Вернуться в меню
+        </a>
+        {% if basket|length > 0 %}
+            <a href="{% url 'basket:basket_buy' %}" class="btn btn-danger">
+                Оформить заказ →
+            </a>
+        {% endif %}
+    </div>
+</div>
+{% else %}
+<h1 style="text-align: center; margin: 50px 0;">Сначала авторизуйтесь</h1>
+{% endif %}
+{% endblock %}

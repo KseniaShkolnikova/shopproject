@@ -1,0 +1,35 @@
+{% extends 'admin_base.html' %}
+{% load static %}
+
+{% block title_name %}
+Содержимое корзины
+{% endblock %}
+
+{% block content %}
+                    {% if user.is_authenticated and user.is_staff %}
+
+<div class="container">
+    <div class="page-header">
+        <h1>Содержимое корзины</h1>
+        <a href="{% url 'CartItem_create_view' %}" class="add-link">Добавить</a>
+    </div>
+    <ul class="menu-list">
+        {% for position in CartItem %}
+        <li>
+            <a href="{% url 'CartItem_detail_view' position.pk %}" class="cart-info">{{ position.menu_item }}</a>
+            <div class="action-links">
+                <a href="{% url 'CartItem_update_view' position.pk %}" class="action-link edit-link">Редактировать</a>
+                <a href="{% url 'CartItem_delete_view' position.pk %}" class="action-link delete-link">Удалить</a>
+            </div>
+        </li>
+        {% empty %}
+        <div class="empty-message">
+            Корзина пуста. Нажмите "Добавить", чтобы добавить товары.
+        </div>
+        {% endfor %}
+    </ul>
+</div>
+{% else %}
+            <h1>Сначала авторизируйтесь</h1>
+{% endif %}
+{% endblock %}

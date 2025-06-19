@@ -1,0 +1,30 @@
+{% extends 'admin_base.html' %}
+{% load static %}
+
+{% block title_name%}
+Удаление заказа
+{%endblock%}   
+{% block content%}
+{% if user.is_authenticated and user.is_staff %}
+
+<body>
+    <div class="container">
+        <div class="delete-container">
+            <h1>Удалить заказ {{Order.user}} - {{Order.created_at}}?</h1>
+            <p class="warning-text">Вы уверены, что хотите удалить этот заказ? Это действие нельзя отменить.</p>
+            
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-actions">
+                    <button type="submit" class="delete-btn">Да, удалить</button>
+                    <a href="{% url 'Order_list_view' %}" class="cancel-link">Отмена</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
+{% else %}
+            <h1>Сначала авторизируйтесь</h1>
+{% endif %}
+{%endblock%}   

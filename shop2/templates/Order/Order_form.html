@@ -1,0 +1,31 @@
+{% extends 'admin_base.html' %}
+{% load static %}
+
+{% block title_name%}
+{% if form.instance.pk %}Редактировать заказ{% else %}Добавить заказ{% endif %}
+{%endblock%}   
+{% block content%}
+                    {% if user.is_authenticated and user.is_staff %}
+
+<body>
+    <div class="container">
+        <div class="form-container">
+            <h1>{% if form.instance.pk %}Редактировать заказ{% else %}Добавить заказ{% endif %}</h1>
+            
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.as_p }}
+                
+                <div class="form-actions">
+                    <button type="submit" class="submit-btn">Сохранить</button>
+                    <a href="{% url 'Order_list_view' %}" class="back-link">Вернуться к списку</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
+{% else %}
+            <h1>Сначала авторизируйтесь</h1>
+{% endif %}
+{%endblock%}   

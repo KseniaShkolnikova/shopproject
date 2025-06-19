@@ -1,0 +1,157 @@
+        <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #0a0a0a;
+            color: #f0f0f0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #d10000 0%, #7a0000 100%);
+            padding: 18px 0;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        nav ul {
+            display: flex;
+            justify-content: space-between;
+            list-style: none;
+        }
+        
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 10px 20px;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            font-size: 16px;
+            letter-spacing: 0.5px;
+        }
+        
+        nav a:hover {
+            background-color: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 0 20px;
+            flex: 1;
+        }
+        
+        .delete-confirmation {
+            background-color: #1a1a1a;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            border-top: 4px solid #ff4d4d;
+            text-align: center;
+        }
+        
+        h1 {
+            color: #ff4d4d;
+            font-size: 2em;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #333;
+        }
+        
+        .warning-message {
+            color: #ff9999;
+            font-size: 18px;
+            margin-bottom: 30px;
+        }
+        
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .delete-btn {
+            background: linear-gradient(to right, #b30000, #800000);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 16px;
+        }
+        
+        .delete-btn:hover {
+            background: linear-gradient(to right, #cc0000, #990000);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(179, 0, 0, 0.3);
+        }
+        
+        .cancel-link {
+            background-color: #333;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .cancel-link:hover {
+            background-color: #444;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            color: #666;
+            font-size: 14px;
+            border-top: 1px solid #333;
+            background-color: #1a1a1a;
+            margin-top: auto;
+        }
+        
+        @media (max-width: 768px) {
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 10px;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .delete-btn, .cancel-link {
+                width: 100%;
+            }
+        }
+    </style>
+    
+    
+    <footer>
+        <p>&copy; 2025 Ваш магазин. Все права защищены.</p>
+    </footer>

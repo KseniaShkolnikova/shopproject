@@ -1,0 +1,31 @@
+{% extends 'admin_base.html' %}
+{% load static %}
+
+{% block title_name%}
+Удаление позиции
+{%endblock%}   
+{% block content%}
+{% if user.is_authenticated and user.is_staff %}
+
+<body>
+    <div class="container">
+        <div class="delete-confirmation">
+            <h1>Удалить позицию {{OrderItem.order}}?</h1>
+            <p class="warning-message">Вы уверены, что хотите удалить эту позицию? Это действие нельзя отменить.</p>
+            
+            <form method="post">
+                {% csrf_token %}
+                <div class="action-buttons">
+                    <button type="submit" class="delete-btn">Удалить</button>
+                    <a href="{% url 'OrderItem_list_view' %}" class="cancel-link">Вернуться к списку</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
+{% else %}
+            <h1>Сначала авторизируйтесь</h1>
+        {% endif %}
+
+{%endblock%}   

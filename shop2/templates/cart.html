@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title_name%}
+Корзина - SOY FLOWER | Ресторан японской кухни
+{%endblock%}   
+{% block content%}
+<body>
+    <main>
+        <div class="container">
+            <h1>Ваша корзина</h1>
+            
+            <div class="cart-container">
+                <div class="cart-items">
+                    <!-- Блюдо 1 в корзине -->
+                    <div class="cart-item">
+                        <div class="cart-item-image">
+                            <img src="https://images.unsplash.com/photo-1611143669185-af224c5e3252?ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80" alt="Сет Филадельфия">
+                        </div>
+                        <div class="cart-item-details">
+                            <div class="cart-item-title">Сет Филадельфия</div>
+                            <div class="cart-item-price">1 890 ₽</div>
+                            <div class="cart-item-actions">
+                                <div class="quantity">
+                                    <button>-</button>
+                                    <input type="text" value="1">
+                                    <button>+</button>
+                                </div>
+                                <a href="#" class="remove-item"><i class="fas fa-trash-alt"></i> Удалить</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Блюдо 2 в корзине -->
+                    <div class="cart-item">
+                        <div class="cart-item-image">
+                            <img src="https://www.foodland.ru/upload/iblock/a82/a82c720dfe8ffb750dd545ee43b59e22.jpg" alt="Ролл Калифорния">
+                        </div>
+                        <div class="cart-item-details">
+                            <div class="cart-item-title">Ролл Калифорния</div>
+                            <div class="cart-item-price">690 ₽</div>
+                            <div class="cart-item-actions">
+                                <div class="quantity">
+                                    <button>-</button>
+                                    <input type="text" value="2">
+                                    <button>+</button>
+                                </div>
+                                <a href="#" class="remove-item"><i class="fas fa-trash-alt"></i> Удалить</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Блюдо 3 в корзине -->
+                    <div class="cart-item">
+                        <div class="cart-item-image">
+                            <img src="https://images.unsplash.com/photo-1553621042-f6e147245754?ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80" alt="Суп Рамен">
+                        </div>
+                        <div class="cart-item-details">
+                            <div class="cart-item-title">Суп Рамен</div>
+                            <div class="cart-item-price">590 ₽</div>
+                            <div class="cart-item-actions">
+                                <div class="quantity">
+                                    <button>-</button>
+                                    <input type="text" value="1">
+                                    <button>+</button>
+                                </div>
+                                <a href="#" class="remove-item"><i class="fas fa-trash-alt"></i> Удалить</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="cart-summary">
+                    <div class="summary-title">Итого</div>
+                    <div class="summary-row">
+                        <span>Блюда (4)</span>
+                        <span>3 860 ₽</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Доставка</span>
+                        <span>Бесплатно</span>
+                    </div>
+                    <div class="summary-row summary-total">
+                        <span>К оплате</span>
+                        <span>3 860 ₽</span>
+                    </div>
+                    <button class="checkout-btn">Оформить заказ</button>
+                    <a href="{% url 'products' %}" class="continue-shopping">Продолжить выбор</a>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>
+{%endblock%}   

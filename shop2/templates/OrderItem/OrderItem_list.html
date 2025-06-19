@@ -1,0 +1,36 @@
+{% extends 'admin_base.html' %}
+{% load static %}
+
+{% block title_name %}
+Содержимое заказов
+{% endblock %}
+
+{% block content %}
+{% if user.is_authenticated and user.is_staff %}
+
+<div class="container">
+    <div class="page-header">
+        <h1>Содержимое заказов</h1>
+        <a href="{% url 'OrderItem_create_view' %}" class="add-link">Добавить</a>
+    </div>
+
+    <ul class="menu-list">
+        {% for position in OrderItem %}
+        <li>
+            <a href="{% url 'OrderItem_detail_view' position.pk %}" class="menu-info">{{ position.order }}</a>
+            <div class="action-links">
+                <a href="{% url 'OrderItem_update_view' position.pk %}" class="action-link edit-link">Редактировать</a>
+                <a href="{% url 'OrderItem_delete_view' position.pk %}" class="action-link delete-link">Удалить</a>
+            </div>
+        </li>
+        {% empty %}
+        <div class="empty-message">
+            Нет элементов для отображения. Нажмите "Добавить", чтобы создать новый.
+        </div>
+        {% endfor %}
+    </ul>
+</div>
+{% else %}
+            <h1>Сначала авторизируйтесь</h1>
+{% endif %}
+{% endblock %}

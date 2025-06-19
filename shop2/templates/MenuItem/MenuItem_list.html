@@ -1,0 +1,38 @@
+{% extends 'admin_base.html' %}
+{% load static %}
+
+{% block title_name%}
+Позиции меню 
+{%endblock%}   
+{% block content%}
+                    {% if user.is_authenticated and user.is_staff %}
+
+<body>
+    <div class="container">
+        <div class="page-header">
+            <h1>Позиции меню</h1>
+            <a href="{% url 'MenuItem_create_view' %}" class="add-link">Добавить</a>
+        </div>
+
+        <ul class="menu-list">
+            {% for position in MenuItem %}
+            <li>
+                <a href="{% url 'MenuItem_detail_view' position.pk %}" class="menu-info">{{ position.name }}</a>
+                <div class="action-links">
+                    <a href="{% url 'MenuItem_update_view' position.pk %}" class="action-link edit-link">Редактировать</a>
+                    <a href="{% url 'MenuItem_delete_view' position.pk %}" class="action-link delete-link">Удалить</a>
+                </div>
+            </li>
+            {% empty %}
+            <div class="empty-message">
+                Нет позиций в меню. Нажмите "Добавить", чтобы создать новую.
+            </div>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>
+{% else %}
+            <h1>Сначала авторизируйтесь</h1>
+{% endif %}
+{%endblock%}   

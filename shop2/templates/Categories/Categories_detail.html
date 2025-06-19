@@ -1,0 +1,45 @@
+{% extends 'admin_base.html' %}
+{% load static %}
+
+{% block title_name %}
+{{ Categories.name }} - Детали категории
+{% endblock %}
+
+{% block content %}
+                    {% if user.is_authenticated and user.is_staff %}
+
+<div class="container">
+    <div class="form-container">
+        <h1>{{ Categories.name }}</h1>
+        
+        {% if Categories.photo %}
+        <div class="image-container">
+            <img src="{{ Categories.photo.url }}" alt="{{ Categories.name }}" class="detail-image">
+        </div>
+        {% endif %}
+        
+        <div class="detail-item">
+            <span class="detail-label">Описание:</span>
+            <span class="detail-value">{{ Categories.description|default:"-" }}</span>
+        </div>
+        
+        {% if Categories.is_active is not None %}
+        <div class="detail-item">
+            <span class="detail-label">Активна:</span>
+            <span class="status-badge {% if Categories.is_active %}status-active{% else %}status-inactive{% endif %}">
+                {% if Categories.is_active %}Да{% else %}Нет{% endif %}
+            </span>
+        </div>
+        {% endif %}
+        
+        <div class="action-buttons">
+            <a href="{% url 'Categories_list_view' %}" class="back-link">Вернуться к списку</a>
+            <a href="{% url 'Categories_update_view' Categories.pk %}" class="back-link">Редактировать</a>
+            <a href="{% url 'Categories_delete_view' Categories.pk %}" class="back-link">Удалить</a>
+        </div>
+    </div>
+</div>
+{% else %}
+            <h1>Сначала авторизируйтесь</h1>
+{% endif %}
+{% endblock %}
