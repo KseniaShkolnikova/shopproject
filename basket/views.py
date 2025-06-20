@@ -55,7 +55,7 @@ def basket_buy(request):
         form = OrderForm2(request.POST)
         if form.is_valid():
             order = form.save(commit=False)
-            order.user = request.user  # Добавляем текущего пользователя
+            order.user = request.user 
             order.total_price = basket.get_total_price()
             order.status = status
             order.save()

@@ -90,10 +90,9 @@ class Order(models.Model):
         return total
     
     def save(self, *args, **kwargs):
-        # При сохранении проверяем статус
-        if self.status.code == '3':  # Если статус "Оплачено"
+        if self.status.code == '3':
             self.is_paid = True
-            if not self.payment_date:  # Если дата оплаты не установлена
+            if not self.payment_date: 
                 self.payment_date = timezone.now()
         super().save(*args, **kwargs)
     

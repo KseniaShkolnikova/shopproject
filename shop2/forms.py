@@ -55,7 +55,6 @@ class OrderForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['user'].queryset = User.objects.all().order_by('username')
         
-        # Для нового заказа устанавливаем статус по умолчанию
         if not self.instance.pk:
             self.fields['status'].initial = OrderStatus.objects.get(code='new')
 

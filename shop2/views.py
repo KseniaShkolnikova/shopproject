@@ -78,7 +78,6 @@ class OrderCreateView(PermissionRequiredMixin, CreateView):
     success_url = reverse_lazy('Order_list_view')
 
     def form_valid(self, form):
-        # Устанавливаем начальный статус для новых заказов
         if not form.instance.pk:
             form.instance.status = OrderStatus.objects.get(code='new')
         
@@ -95,19 +94,15 @@ class OrderUpdateView(PermissionRequiredMixin, UpdateView):
     success_url = reverse_lazy('Order_list_view')
 
     def form_valid(self, form):
-        # Get the current status before saving
         old_status = self.object.status
         
-        # Save the form
         response = super().form_valid(form)
         
-        # If status changed to "Paid" (where code='3')
         if self.object.status.code == '3' and old_status.code != '3':
             self.object.is_paid = True
-            self.object.payment_date = timezone.now()  # Use timezone.now() instead
+            self.object.payment_date = timezone.now() 
             self.object.save()
         
-        # Recalculate the total
         self.object.calculate_total()
         
         return response
