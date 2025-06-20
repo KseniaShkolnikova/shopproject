@@ -7,45 +7,56 @@
 
 {% block content %}
 {% if user.is_authenticated and user.is_staff %}
-<div class="container">
-    <div class="form-container">
-        <h1>{% if form.instance.pk %}Редактировать заказ #{{ form.instance.id }}{% else %}Создать заказ{% endif %}</h1>
-        
-        <form method="post" enctype="multipart/form-data">
-            {% csrf_token %}
+<body>
+    <div class="container">
+        <div class="form-container">
+            <h1>{% if form.instance.pk %}Редактировать заказ #{{ form.instance.id }}{% else %}Создать заказ{% endif %}</h1>
             
-            <div class="form-group mb-3">
-                <label class="form-label">{{ form.user.label }}</label>
-                {{ form.user }}
-                {% if form.user.errors %}
-                    <div class="text-danger">{{ form.user.errors }}</div>
-                {% endif %}
-            </div>
-            
-            <div class="form-group mb-3">
-                <label class="form-label">{{ form.address.label }}</label>
-                {{ form.address }}
-            </div>
-            
-            <div class="form-group mb-3">
-                <label class="form-label">{{ form.comment.label }}</label>
-                {{ form.comment }}
-            </div>
-            
-            <div class="form-group mb-3">
-                <label class="form-label">{{ form.payment_method.label }}</label>
-                {{ form.payment_method }}
-            </div>
-            
-            <div class="form-actions mt-4">
-                <button type="submit" class="btn btn-primary">Сохранить</button>
-                <a href="{% url 'Order_list_view' %}" class="btn btn-secondary">Отмена</a>
-            </div>
-        </form>
+            <form method="post">
+                {% csrf_token %}
+                
+                <p>
+                    <label for="{{ form.user.id_for_label }}">{{ form.user.label }}</label>
+                    {{ form.user }}
+                    {% if form.user.errors %}
+                        <div class="text-danger">{{ form.user.errors }}</div>
+                    {% endif %}
+                </p>
+                
+                <!-- Поле статуса -->
+                <p>
+                    <label for="{{ form.status.id_for_label }}">{{ form.status.label }}</label>
+                    {{ form.status }}
+                    {% if form.status.errors %}
+                        <div class="text-danger">{{ form.status.errors }}</div>
+                    {% endif %}
+                </p>
+                
+                <!-- Остальные поля формы -->
+                <p>
+                    <label for="{{ form.address.id_for_label }}">{{ form.address.label }}</label>
+                    {{ form.address }}
+                </p>
+                
+                <p>
+                    <label for="{{ form.comment.id_for_label }}">{{ form.comment.label }}</label>
+                    {{ form.comment }}
+                </p>
+                
+                <p>
+                    <label for="{{ form.payment_method.id_for_label }}">{{ form.payment_method.label }}</label>
+                    {{ form.payment_method }}
+                </p>
+                
+                <div class="form-actions">
+                    <button type="submit" class="submit-btn">Сохранить</button>
+                    <a href="{% url 'Order_list_view' %}" class="back-link">Отмена</a>
+                </div>
+            </form>
+        </div>
     </div>
-</div>
+</body>
 {% else %}
 <h1 class="text-center mt-5">Доступ запрещен</h1>
 {% endif %}
 {% endblock %}
-

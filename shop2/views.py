@@ -6,6 +6,7 @@ from .forms import *
 from basket.forms import *
 from django.contrib.auth import login, logout
 from django.contrib.auth.mixins import PermissionRequiredMixin
+from datetime import datetime, timezone
 
 
 class OrderItemListView(PermissionRequiredMixin,ListView):
@@ -67,6 +68,8 @@ class OrderDetailView(PermissionRequiredMixin,DetailView):
         self.object.save()  
         return response
 
+from django.utils import timezone
+
 class OrderCreateView(PermissionRequiredMixin, CreateView):
     permission_required = 'shop.add_order'
     model = Order
@@ -74,18 +77,16 @@ class OrderCreateView(PermissionRequiredMixin, CreateView):
     template_name = 'Order/Order_form.html'
     success_url = reverse_lazy('Order_list_view')
 
-    def get_form(self, form_class=None):
-        form = super().get_form(form_class)
-        if not self.request.user.is_staff:
-            form.fields['user'].widget = forms.HiddenInput()
-            form.fields['user'].initial = self.request.user.id
-        return form
-
     def form_valid(self, form):
+        # Устанавливаем начальный статус для новых заказов
+        if not form.instance.pk:
+            form.instance.status = OrderStatus.objects.get(code='new')
+        
         response = super().form_valid(form)
         self.object.calculate_total()
         return response
-    
+
+
 class OrderUpdateView(PermissionRequiredMixin, UpdateView):
     permission_required = 'shop.change_order'
     model = Order
@@ -93,16 +94,22 @@ class OrderUpdateView(PermissionRequiredMixin, UpdateView):
     template_name = 'Order/Order_form.html'
     success_url = reverse_lazy('Order_list_view')
 
-    def get_form(self, form_class=None):
-        form = super().get_form(form_class)
-        if not self.request.user.is_staff:
-            form.fields['user'].widget = forms.HiddenInput()
-            form.fields['user'].initial = self.request.user.id
-        return form
-
     def form_valid(self, form):
+        # Get the current status before saving
+        old_status = self.object.status
+        
+        # Save the form
         response = super().form_valid(form)
+        
+        # If status changed to "Paid" (where code='3')
+        if self.object.status.code == '3' and old_status.code != '3':
+            self.object.is_paid = True
+            self.object.payment_date = timezone.now()  # Use timezone.now() instead
+            self.object.save()
+        
+        # Recalculate the total
         self.object.calculate_total()
+        
         return response
 
 class OrderdeleteView(PermissionRequiredMixin,DeleteView):

@@ -35,7 +35,7 @@ class CategoriesForm(forms.ModelForm):
 
 class OrderForm(forms.ModelForm):
     user = forms.ModelChoiceField(
-        queryset=User.objects.none(),  
+        queryset=User.objects.all(),
         label="Покупатель",
         required=False,
         widget=forms.Select(attrs={'class': 'form-select'})
@@ -43,8 +43,9 @@ class OrderForm(forms.ModelForm):
     
     class Meta:
         model = Order
-        fields = ['user', 'address', 'comment', 'payment_method']
+        fields = ['user', 'status', 'address', 'comment', 'payment_method']
         widgets = {
+            'status': forms.Select(attrs={'class': 'form-select'}),
             'address': forms.TextInput(attrs={'class': 'form-control'}),
             'comment': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
             'payment_method': forms.Select(attrs={'class': 'form-select'}),
@@ -54,9 +55,9 @@ class OrderForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['user'].queryset = User.objects.all().order_by('username')
         
-        if 'instance' not in kwargs: 
+        # Для нового заказа устанавливаем статус по умолчанию
+        if not self.instance.pk:
             self.fields['status'].initial = OrderStatus.objects.get(code='new')
-            self.fields['total_price'].initial = 0
 
 class OrderItemForm(forms.ModelForm):
     class Meta:

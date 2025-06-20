@@ -1,3 +1,4 @@
+from django.utils import timezone
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth import get_user_model
@@ -35,7 +36,7 @@ class PaymentMethod(models.Model):
 # Таблица категорий товаров
 class Categories(models.Model):
     name = models.CharField(max_length=MAX_LENGTH, verbose_name='Категория')
-    description = models.TextField(blank=True, null=True, verbose_name='Описание')
+    description = models.TextField(blank=True, null=True, max_length=MAX_LENGTH, verbose_name='Описание')
     photo = models.ImageField(upload_to='categories/', blank=True, null=True, verbose_name='Изображение')
 
     def __str__(self):
@@ -48,7 +49,7 @@ class Categories(models.Model):
 # Таблица меню
 class MenuItem(models.Model):
     name = models.CharField(max_length=MAX_LENGTH, verbose_name='Название')
-    description = models.TextField(verbose_name='Описание')
+    description = models.TextField(max_length=MAX_LENGTH,verbose_name='Описание')
     price = models.DecimalField(max_digits=8, decimal_places=2, verbose_name='Цена')
     weight = models.PositiveIntegerField(verbose_name='Вес (г)')
     cooking_time = models.PositiveIntegerField(verbose_name='Время приготовления (мин)')
@@ -69,11 +70,11 @@ class MenuItem(models.Model):
 
 # Таблица заказов
 class Order(models.Model):
-    user = models.ForeignKey(User,blank=True, null=True, on_delete=models.PROTECT, verbose_name='Покупатель', related_name='orders')
-    status = models.ForeignKey(OrderStatus, null=True,blank=True, on_delete=models.PROTECT, verbose_name='Статус')
-    total_price = models.DecimalField(max_digits=10, null=True,blank=True, decimal_places=2, verbose_name='Общая сумма')
-    address = models.TextField(verbose_name='Адрес доставки')
-    comment = models.TextField(blank=True, null=True, verbose_name='Комментарий')
+    user = models.ForeignKey(User, on_delete=models.PROTECT, verbose_name='Покупатель', related_name='orders')
+    status = models.ForeignKey(OrderStatus, on_delete=models.PROTECT, default=1, verbose_name='Статус')
+    total_price = models.DecimalField(max_digits=10,default=0,  decimal_places=2, verbose_name='Общая сумма')
+    address = models.TextField(max_length=MAX_LENGTH,verbose_name='Адрес доставки')
+    comment = models.TextField(blank=True, max_length=MAX_LENGTH, null=True, verbose_name='Комментарий')
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
     payment_method = models.ForeignKey(PaymentMethod, on_delete=models.PROTECT, verbose_name='Способ оплаты')
     is_paid = models.BooleanField(default=False, verbose_name='Оплачено')
@@ -89,9 +90,11 @@ class Order(models.Model):
         return total
     
     def save(self, *args, **kwargs):
-        if not self.pk and not self.status_id:
-            default_status = OrderStatus.objects.get(code='new') 
-            self.status = default_status
+        # При сохранении проверяем статус
+        if self.status.code == '3':  # Если статус "Оплачено"
+            self.is_paid = True
+            if not self.payment_date:  # Если дата оплаты не установлена
+                self.payment_date = timezone.now()
         super().save(*args, **kwargs)
     
     def update_total(self):
